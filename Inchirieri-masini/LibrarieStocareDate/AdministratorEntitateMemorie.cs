@@ -20,14 +20,14 @@ namespace LibrarieStocareDate
             return masini;
         }
 
-        // 🔥 Metoda cerută în temă — folosește LINQ
-        public Masina CautaDupaMarca(string marca)
+        
+        public Masina CautaDupaMarca(string marca) 
         {
             return masini
-                .FirstOrDefault(m => m.Marca.ToLower() == marca.ToLower());
+                .FirstOrDefault(m => m.Marca.ToLower() == marca.ToLower()); /// Caută prima mașină care are marca specificată, ignorând majusculele
         }
 
-        // Exemplu suplimentar cu LINQ
+        // Exemplu LINQ
         public List<Masina> GetMasiniDisponibile()
         {
             return masini
