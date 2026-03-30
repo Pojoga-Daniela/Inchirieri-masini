@@ -1,4 +1,4 @@
-#Aplicație închirieri-mașini
+Aplicație închirieri-mașini
 
 Aplicația propusă reprezintă un sistem pentru gestionarea închirierilor de mașini într-un birou de tip rent-a-car. Accesul în aplicație se va face pe baza autentificării angajaților firmei. Utilizatorul va putea vizualiza lista completă a mașinilor disponibile, precum și statusul acestora (disponibil sau indisponibil).
 
