@@ -1,122 +1,159 @@
-﻿using System;
+﻿using LibrarieModele;
 using LibrarieStocareDate;
-using LibrarieModele;
-
+using System;
+using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 class Program
 {
     static void Main()
     {
+        
+        // LOGIN
+        //Citirea utilizatorului de la tastatura
 
-        AdministratorEntitateFisier adminMasini = new AdministratorEntitateFisier("masini.txt");
-        AdministratorClientFisier adminClienti = new AdministratorClientFisier("clienti.txt");
+        string userCorect = "Daniela";
+        string parolaCorecta = "234";
 
-        Console.Write("Numar masini: ");
-        int n = int.Parse(Console.ReadLine()); //citeste un  numar de la tastatura si-l salveaza in n
-        Masina[] masini = new Masina[n]; //vector de masini
+        Console.Write("User: ");
+        string user = Console.ReadLine();
 
-        // Citire masini
+        Console.Write("Parola: ");
+        string parola = Console.ReadLine();
 
-        for (int i = 0; i < n; i++)
+        if (user != userCorect || parola != parolaCorecta)
         {
-            Console.WriteLine($"\nMasina {i + 1}: "); //$ - pentru a afisa numarul curent al masinii (incepand de la 1)
-
-            Console.Write("Marca: ");
-            string marca = Console.ReadLine();
-
-            Console.Write("Model: ");
-            string model = Console.ReadLine();
-
-            Console.Write("An fabricatie: ");
-            int anFabricatie = int.Parse(Console.ReadLine());
-
-            Console.Write("Numar inmatriculare: ");
-            string numarInmatriculare = Console.ReadLine();
-
-            masini[i] = new Masina(marca, model, anFabricatie, numarInmatriculare); //creeaza o noua masina cu datele citite si o stocheaza in vector
-            adminMasini.SalveazaMasina(masini[i]);
+            Console.WriteLine("Autentificare esuata!");
+            return;
         }
 
-        var masiniDinFisier = adminMasini.CitesteMasini(); ///apeleaza metoda CitesteMasini() a administratorului de masini pentru a citi toate masinile din fisier si le stocheaza in variabila masiniDinFisier
+        Console.WriteLine("Autentificare reusita!");
 
-        Console.WriteLine("\nMasini din fisier:");
-        foreach (var m in masiniDinFisier)
+        
+        // ADMINISTRATORI
+        
+        var adminMasini = new AdministratorEntitateFisier("masini.txt");
+        var adminClienti = new AdministratorClientFisier("clienti.txt");
+
+        Console.WriteLine("\n===== MENIU =====");
+        Console.WriteLine("1. Afiseaza toate masinile");
+        Console.WriteLine("2. Afiseaza masini disponibile");
+        Console.WriteLine("3. Cauta masina dupa marca");
+        Console.WriteLine("4. Adauga client");
+        Console.WriteLine("5. Afiseaza clienti");
+        Console.WriteLine("6. Iesire");
+
+        bool ruleaza = true;
+
+        while (ruleaza)
         {
-            Console.WriteLine(m.Info());
-        }
+            
 
-        // Afisare masini
+            Console.Write("Optiune: ");
+            if (!int.TryParse(Console.ReadLine(), out int opt))
+            {
+                Console.WriteLine("Introdu un numar valid!");
+                continue;
+            }
 
-        /*Console.WriteLine("\nMasini disponibile: ");
-        for (int i = 0; i < n; i++)
-        {
+            switch (opt)
+            {
+                
+                // Afisare toate masinile
+                
+                case 1:
+                    var masini = adminMasini.CitesteMasini(); // Salvarea datelor într-o colecție de obiecte (TEMA 3)
+                    foreach (var m in masini)                 //Afișarea datelor dintr-o colecție de obiecte (Tema 3)
+                        Console.WriteLine(m.Info());
+                    break;
 
-            Console.WriteLine(masini[i].Info()); //apeleaza metoda Info() pentru fiecare masina din vector si afiseaza informatiile despre ea
+                
+                // Afisare masini disponibile
+                
+                case 2:
+                    var masiniDisp = adminMasini.CitesteMasini();
+                    bool gasitDisp = false;
+                    foreach (var m in masiniDisp)
+                    {
+                        if (m.Disponibila)
+                        {
+                            Console.WriteLine(m.Info());
+                            gasitDisp = true;
+                        }
+                    }
+                    if (!gasitDisp)
+                        Console.WriteLine("Nu sunt masini disponibile.");
+                    break;
 
-        }*/
+                
+                // Cauta masina dupa marca
+                
+                case 3:
+                    Console.Write("Marca cautata: ");
+                    string marca = Console.ReadLine();
+
+                    var lista = adminMasini.CitesteMasini(); 
+                    bool gasit = false;
+
+                    foreach (var m in lista)
+                    {
+                        if (m.Marca.ToLower() == marca.ToLower())
+                        {
+                            Console.WriteLine(m.Info());
+                            gasit = true;
+                        }
+                    }
+
+                    if (!gasit)
+                        Console.WriteLine("Nu s-au gasit masini cu marca introdusa.");
+                    break;
 
 
-        //Cautare dupa marca
-
-        Console.Write("\nIntrodu marca cautata: ");
-        string marcaCautata = Console.ReadLine();
-
-        var masinaGasita = adminMasini.CautaDupaMarca(marcaCautata);
-
-        if (masinaGasita != null)
-        {
-            Console.WriteLine(masinaGasita.Info());
-        }
-        else
-        {
-            Console.WriteLine("Nu s-au gasit masini.");
-        }
+                // Adauga client
+                //Datele sunt citite de la tastatură folosind Console.ReadLine() (TEMA 3)
 
 
-        //Modificare masina
+                case 4:
+                    Console.Write("Nume: ");
+                    string nume = Console.ReadLine();
 
-        Console.Write("\nNr inmatriculare de modificat: ");
-        string nr = Console.ReadLine();
+                    Console.Write("Prenume: ");
+                    string prenume = Console.ReadLine();
 
-        Console.Write("Marca noua: ");
-        string marcaNoua = Console.ReadLine();
+                    Console.Write("CNP: ");
+                    string cnp = Console.ReadLine();
 
-        Console.Write("Model nou: ");
-        string modelNou = Console.ReadLine();
+                    Client client = new Client(nume, prenume, cnp);
+                    adminClienti.SalveazaClient(client);
 
-        Console.Write("An nou: ");
-        int anNou = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Client adaugat!");
+                    break;
 
-        Masina masinaNoua = new Masina(marcaNoua, modelNou, anNou, nr);
+                
+                // Afiseaza clienti
+                
 
-        adminMasini.ModificaMasina(nr, masinaNoua);
+                case 5:
+                    var clienti = adminClienti.CitesteClienti();  //Salvarea datelor într-o colecție de obiecte (TEMA 3)
+                    if (clienti.Count == 0)
+                        Console.WriteLine("Nu exista clienti in fisier.");
+                    else
+                        foreach (var c in clienti)      //Afișarea datelor dintr-o colecție de obiecte
+                            Console.WriteLine(c.Info());
+                    break;
 
-        Console.WriteLine("Masina modificata!");
+                
+                // Iesire
+                
+                case 6:
+                    ruleaza = false;
+                    Console.WriteLine("La revedere!");
+                    break;
 
-        //Adaugare client
-
-        Console.WriteLine("\n--- CLIENT ---");
-
-        Console.Write("Nume: ");
-        string nume = Console.ReadLine();
-
-        Console.Write("Prenume: ");
-        string prenume = Console.ReadLine();
-
-        Console.Write("CNP: ");
-        string cnp = Console.ReadLine();
-
-        Client client = new Client(nume, prenume, cnp);
-        adminClienti.SalveazaClient(client);
-
-        //Citire client
-
-        var clienti = adminClienti.CitesteClienti();
-
-        Console.WriteLine("\nClienti:");
-        foreach (var c in clienti)
-        {
-            Console.WriteLine(c.Info());
+                default:
+                    Console.WriteLine("Optiune invalida!");
+                    break;
+            }
         }
     }
 }

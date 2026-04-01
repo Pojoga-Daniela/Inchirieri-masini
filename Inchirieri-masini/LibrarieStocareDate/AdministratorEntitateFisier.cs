@@ -13,6 +13,7 @@ namespace LibrarieStocareDate
             this.caleFisier = caleFisier;
         }
 
+        //Nivelul StocareDate cu fișier text (tema 5)
         public void SalveazaMasina(Masina m)
         {
             // salvăm fiecare mașină ca linie text, de ex: Marca;Model;An;Nr
@@ -41,12 +42,15 @@ namespace LibrarieStocareDate
             return masini;
         }
 
+        //Facilități pentru salvare, căutare și modificare (tema 5)
+        //cautare
         public Masina CautaDupaMarca(string marca)
         {
             var masini = CitesteMasini();
             return masini.FirstOrDefault(m => m.Marca.ToLower() == marca.ToLower());
         }
 
+        //modificare
         public void ModificaMasina(string nrInmatriculare, Masina masinaNoua)
         {
             var masini = CitesteMasini();
@@ -58,7 +62,7 @@ namespace LibrarieStocareDate
                     break;
                 }
             }
-            // rescriem fișierul complet
+            // salvare
             File.WriteAllLines(caleFisier, masini.Select(m => $"{m.Marca};{m.Model};{m.AnFabricatie};{m.NumarInmatriculare};{m.Disponibila}"));
         }
     }

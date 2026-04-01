@@ -9,11 +9,13 @@ public class AdministratorClientFisier
         this.caleFisier = caleFisier;
     }
 
+    //Facilități pentru a doua entitate
     public void SalveazaClient(Client c)
     {
         File.AppendAllText(caleFisier, $"{c.Nume};{c.Prenume};{c.CNP}\n");
     }
 
+    //Nivelul StocareDate cu fișier text (tema 5)
     public List<Client> CitesteClienti()
     {
         List<Client> clienti = new List<Client>();

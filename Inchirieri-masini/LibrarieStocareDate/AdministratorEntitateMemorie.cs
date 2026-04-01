@@ -23,16 +23,15 @@ namespace LibrarieStocareDate
         
         public Masina CautaDupaMarca(string marca) 
         {
-            return masini
-                .FirstOrDefault(m => m.Marca.ToLower() == marca.ToLower()); /// Caută prima mașină care are marca specificată, ignorând majusculele
+            
+            return masini.FirstOrDefault(m => m.Marca.ToLower() == marca.ToLower()); /// Caută prima mașină care are marca specificată, ignorând majusculele
         }
 
         // Exemplu LINQ
         public List<Masina> GetMasiniDisponibile()
         {
-            return masini
-                .Where(m => m.Disponibila)
-                .ToList();
+            return masini.Where(m => m.Disponibila).ToList();
         }
+
     }
 }
