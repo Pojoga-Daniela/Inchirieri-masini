@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37027.9 d17.14
+VisualStudioVersion = 17.14.37027.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inchirieri-masini", "Inchirieri-masini\Inchirieri-masini.csproj", "{8A692D8B-098E-4BCD-9C98-03A34BCDDBDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarieModele", "LibrarieModele\LibrarieModele.csproj", "{F04E5A95-B3DD-4CE9-A1AF-D52419E1CB50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarieStocareDate", "LibrarieStocareDate\LibrarieStocareDate.csproj", "{627AEAB1-081B-4A7B-90A7-3FA9A556D9A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inchirieri-Masini.WPF", "Inchirieri-Masini.WPF\Inchirieri-Masini.WPF.csproj", "{1D073BA1-B8FA-4741-9D83-261835E131A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{627AEAB1-081B-4A7B-90A7-3FA9A556D9A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{627AEAB1-081B-4A7B-90A7-3FA9A556D9A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{627AEAB1-081B-4A7B-90A7-3FA9A556D9A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D073BA1-B8FA-4741-9D83-261835E131A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D073BA1-B8FA-4741-9D83-261835E131A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D073BA1-B8FA-4741-9D83-261835E131A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D073BA1-B8FA-4741-9D83-261835E131A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
