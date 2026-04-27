@@ -44,48 +44,93 @@
         </Style>
 
     </Window.Resources>
+    <Grid Margin="10">
 
-    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*" />
+            <!-- Stânga: formular -->
+            <ColumnDefinition Width="1*" />
+            <!-- Dreapta: tabel -->
+        </Grid.ColumnDefinitions>
 
-        <!-- CARD principal -->
-        <Border Background="#AED6F1"
-                CornerRadius="15"
-                Padding="25"
-                Width="420"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                BorderBrush="#5DADE2"
-                BorderThickness="2">
+        <!-- ========================= -->
+        <!--      FORMULAR CLIENT      -->
+        <!-- ========================= -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel HorizontalAlignment="Center" Margin="0 20">
 
-            <StackPanel>
+                <Border Background="#AED6F1"
+                    CornerRadius="15"
+                    Padding="25"
+                    Width="380"
+                    Margin="0 20"
+                    BorderBrush="#5DADE2"
+                    BorderThickness="2">
 
-                <!-- Titlu -->
-                <Label Content="Detalii Închiriere"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Foreground="#154360"
-                       Margin="0 0 0 15"/>
+                    <StackPanel>
 
-                <!-- Informații -->
-                <Label Name="lblClient" FontSize="18" FontWeight="Bold"/>
-                <Label Name="lblMasina"/>
-                <Label Name="lblPerioada"/>
+                        <Label Content="Adaugă Client Nou"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Foreground="#154360"
+                           Margin="0 0 0 15"/>
 
-                <!-- Linie de separare -->
-                <Separator Margin="0 15"/>
+                        <!-- NUME -->
+                        <Label x:Name="LblNume" Content="Nume"/>
+                        <TextBox x:Name="TxtNume"/>
+                        <TextBlock x:Name="ErrNume" Foreground="Red" Visibility="Collapsed"/>
 
-                <!-- Butoane -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Confirmă"/>
-                    <Button Content="Anulează" Background="#3498DB"/>
-                </StackPanel>
+                        <!-- PRENUME -->
+                        <Label x:Name="LblPrenume" Content="Prenume"/>
+                        <TextBox x:Name="TxtPrenume"/>
+                        <TextBlock x:Name="ErrPrenume" Foreground="Red" Visibility="Collapsed"/>
+
+                        <!-- CNP -->
+                        <Label x:Name="LblCNP" Content="CNP"/>
+                        <TextBox x:Name="TxtCNP"/>
+                        <TextBlock x:Name="ErrCNP" Foreground="Red" Visibility="Collapsed"/>
+
+                        <Separator Margin="0 10"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Adaugă" Click="OnAddClient"/>
+                            <Button Content="Reset" Background="#3498DB" Click="OnResetClient"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
 
             </StackPanel>
+        </ScrollViewer>
 
-        </Border>
+        <!-- ========================= -->
+        <!--        TABEL CLIENTI      -->
+        <!-- ========================= -->
+        <StackPanel Grid.Column="1" Margin="20">
+
+            <Label Content="Lista Clienților"
+               FontSize="22"
+               FontWeight="Bold"
+               HorizontalAlignment="Center"
+               Foreground="#154360"
+               Margin="0 0 0 15"/>
+
+            <DataGrid x:Name="DataGridClienti"
+                  AutoGenerateColumns="True"
+                  Background="White"
+                  Foreground="Black"
+                  FontSize="14"
+                  Margin="0 10"
+                  Height="350"
+                  Width="420"
+                  IsReadOnly="True"/>
+        </StackPanel>
 
     </Grid>
+
+
+
 </Window>
 
     
