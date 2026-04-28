@@ -28,6 +28,8 @@ namespace InchirieriMasini.WPF
 
             // conectăm DataGrid-ul la listă
             DataGridClienti.ItemsSource = listaClienti;
+            this.SizeChanged += MainWindow_SizeChanged;
+
         }
 
         // ============================
@@ -103,11 +105,19 @@ namespace InchirieriMasini.WPF
             if (!ValideazaDateClient())
                 return;
 
+            string gen = RbFeminin.IsChecked == true ? "Feminin" : "Masculin";
+            string abonat = CbNewsletter.IsChecked == true ? "Da" : "Nu";
+
+
             Client c = new Client(
                 TxtNume.Text,
                 TxtPrenume.Text,
                 TxtCNP.Text
+
+
             );
+            c.Gen = gen;
+            c.Abonat = abonat;
 
             // adăugăm în tabel
             listaClienti.Add(c);
@@ -131,5 +141,95 @@ namespace InchirieriMasini.WPF
             LblPrenume.Foreground = new SolidColorBrush(Color.FromRgb(27, 79, 114));
             LblCNP.Foreground = new SolidColorBrush(Color.FromRgb(27, 79, 114));
         }
+
+        private void OnExit(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        
+        private void FocusAdd(object sender, RoutedEventArgs e)
+        {
+            TxtNume.Focus();
+        }
+
+        private void OnCautaClient(object sender, RoutedEventArgs e)
+        {
+            string text = TxtCauta.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                DataGridClienti.ItemsSource = listaClienti;
+                return;
+            }
+
+            var filtrat = listaClienti
+                .Where(c =>
+                    c.Nume.ToLower().Contains(text) ||
+                    c.Prenume.ToLower().Contains(text) ||
+                    c.CNP.ToLower().Contains(text) ||
+                    c.Gen.ToLower().Contains(text) ||
+                    c.Abonat.ToLower().Contains(text)
+                )
+                .ToList();
+
+            DataGridClienti.ItemsSource = filtrat;
+        }
+
+
+        private void OnResetCautare(object sender, RoutedEventArgs e)
+        {
+            TxtCauta.Text = "";
+            DataGridClienti.ItemsSource = listaClienti;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.ActualWidth < 900)
+            {
+                // Fereastră mică → formularul și tabelul se pun unul sub altul
+                Grid.SetColumn(ScrollViewerFormular, 0);
+                Grid.SetRow(ScrollViewerFormular, 0);
+
+                Grid.SetColumn(StackPanelTabel, 0);
+                Grid.SetRow(StackPanelTabel, 1);
+            }
+            else
+            {
+                // Fereastră mare → formularul și tabelul sunt unul lângă altul
+                Grid.SetColumn(ScrollViewerFormular, 0);
+                Grid.SetRow(ScrollViewerFormular, 0);
+
+                Grid.SetColumn(StackPanelTabel, 1);
+                Grid.SetRow(StackPanelTabel, 0);
+            }
+        }
+
+
+        private void OnMenuAddClient(object sender, RoutedEventArgs e)
+        {
+            TxtNume.Focus();
+        }
+
+        private void OnMenuSearchClient(object sender, RoutedEventArgs e)
+        {
+            TxtCauta.Focus();
+        }
+
+        private void OnAbout(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+                "Aplicație realizată de Pojoga Dumitrita-Daniela\nProiect PIU – Inchirieri AUTO\n2026",
+                "Despre aplicație",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+        }
+
+
+
+
+
+
+
     }
 }
