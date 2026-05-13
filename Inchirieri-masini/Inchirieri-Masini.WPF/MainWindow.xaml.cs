@@ -17,6 +17,9 @@ namespace InchirieriMasini.WPF
 {
     public partial class MainWindow : Window
     {
+        public ObservableCollection<Masina> Masini { get; set; }
+        public Masina MasinaCurenta { get; set; }
+
         private const int MAX_LUNGIME = 15;
 
         // lista care se afișează în DataGrid
@@ -30,6 +33,12 @@ namespace InchirieriMasini.WPF
             DataGridClienti.ItemsSource = listaClienti;
             CmbSelecteazaClient.ItemsSource = listaClienti;
             this.SizeChanged += MainWindow_SizeChanged;
+            Masini = new ObservableCollection<Masina>();
+            MasinaCurenta = new Masina();
+            DataContext = this;
+
+
+
 
         }
 
@@ -301,6 +310,33 @@ namespace InchirieriMasini.WPF
                 DataGridClienti.Items.Refresh();
             }
         }
+
+        private void BtnAdaugaMasina_Click(object sender, RoutedEventArgs e)
+        {
+            Masini.Add(new Masina
+            {
+                Marca = MasinaCurenta.Marca,
+                Model = MasinaCurenta.Model,
+                AnFabricatie = MasinaCurenta.AnFabricatie,
+                NumarInmatriculare = MasinaCurenta.NumarInmatriculare,
+                Disponibila = MasinaCurenta.Disponibila
+            });
+
+            MasinaCurenta = new Masina();
+        }
+        private void BtnModificaMasina_Click(object sender, RoutedEventArgs e)
+        {
+            // Binding TwoWay actualizează automat obiectul selectat
+        }
+
+        private void BtnStergeMasina_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataGridMasini.SelectedItem is Masina m)
+                Masini.Remove(m);
+        }
+
+
+
 
 
 

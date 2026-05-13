@@ -141,7 +141,11 @@
         <!-- ========================= -->
         <!--      FORMULAR CLIENT      -->
         <!-- ========================= -->
-        <Grid x:Name="MainGrid" Grid.ColumnSpan="2" Margin="0,23,0,0" Grid.RowSpan="2">
+        <ScrollViewer Grid.Row="1"
+              Grid.ColumnSpan="2"
+              Margin="0,23,0,0"
+              VerticalScrollBarVisibility="Auto">
+        <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -150,6 +154,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <!--Masini-->
             </Grid.RowDefinitions>
 
             <ScrollViewer x:Name="ScrollViewerFormular" Grid.Column="0" Grid.Row="0" VerticalScrollBarVisibility="Auto">
@@ -304,8 +309,87 @@
 
             </StackPanel>
 
-        </Grid>
+            <GroupBox Header="Gestionare Mașini"
+                      Grid.Row="2"
+                      Grid.ColumnSpan="2"
+                      Margin="20"
+                      FontSize="22"
+                      FontWeight="Bold">
 
+                <StackPanel>
+
+                    <!-- Formular Mașini -->
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+
+                        <StackPanel Margin="0 0 20 0">
+                            <Label Content="Marcă"/>
+                            <TextBox Width="120"
+                         Text="{Binding MasinaCurenta.Marca, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0 0 20 0">
+                            <Label Content="Model"/>
+                            <TextBox Width="120"
+                         Text="{Binding MasinaCurenta.Model, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0 0 20 0">
+                            <Label Content="An fabricație"/>
+                            <TextBox Width="80"
+                         Text="{Binding MasinaCurenta.AnFabricatie, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0 0 20 0">
+                            <Label Content="Nr. înmatriculare"/>
+                            <TextBox Width="120"
+                         Text="{Binding MasinaCurenta.NumarInmatriculare, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <Label Content="Disponibilă"/>
+                            <CheckBox IsChecked="{Binding MasinaCurenta.Disponibila, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!-- Butoane CRUD -->
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <Button Content="Adaugă" Width="90" Margin="0 0 10 0"
+                    Click="BtnAdaugaMasina_Click"/>
+                        <Button Content="Modifică" Width="90" Margin="0 0 10 0"
+                    Click="BtnModificaMasina_Click"/>
+                        <Button Content="Șterge" Width="80"
+                    Click="BtnStergeMasina_Click"/>
+                    </StackPanel>
+
+                    <!-- DataGrid -->
+                    <DataGrid x:Name="DataGridMasini"
+                  ItemsSource="{Binding Masini}"
+                  SelectedItem="{Binding MasinaCurenta, Mode=TwoWay}"
+                  AutoGenerateColumns="False">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Marcă" Binding="{Binding Marca}"/>
+                            <DataGridTextColumn Header="Model" Binding="{Binding Model}"/>
+                            <DataGridTextColumn Header="An" Binding="{Binding AnFabricatie}"/>
+                            <DataGridTextColumn Header="Nr. înmatriculare" Binding="{Binding NumarInmatriculare}"/>
+                            <DataGridCheckBoxColumn Header="Disponibilă" Binding="{Binding Disponibila}"/>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                    <Label Content="{Binding ElementName=DataGridMasini,
+                                 Path=Items.Count,
+                                 StringFormat='Număr mașini: {0}'}"
+               FontWeight="Bold"
+               Margin="0 10 0 0"/>
+
+                </StackPanel>
+            </GroupBox>
+
+
+        </Grid>
+        </ScrollViewer>
     </Grid>
 
 </Window>
