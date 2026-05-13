@@ -28,6 +28,7 @@ namespace InchirieriMasini.WPF
 
             // conectăm DataGrid-ul la listă
             DataGridClienti.ItemsSource = listaClienti;
+            CmbSelecteazaClient.ItemsSource = listaClienti;
             this.SizeChanged += MainWindow_SizeChanged;
 
         }
@@ -108,16 +109,22 @@ namespace InchirieriMasini.WPF
             string gen = RbFeminin.IsChecked == true ? "Feminin" : "Masculin";
             string abonat = CbNewsletter.IsChecked == true ? "Da" : "Nu";
 
+            DateTime dataNasterii = DtpDataNasterii.SelectedDate ?? DateTime.Today;
 
             Client c = new Client(
                 TxtNume.Text,
                 TxtPrenume.Text,
-                TxtCNP.Text
+                TxtCNP.Text,
+                dataNasterii
+
+
+
 
 
             );
             c.Gen = gen;
             c.Abonat = abonat;
+            
 
             // adăugăm în tabel
             listaClienti.Add(c);
@@ -224,9 +231,76 @@ namespace InchirieriMasini.WPF
                 MessageBoxImage.Information
             );
         }
+        /// lab 9- selectare client din ComboBox și afișare detalii în formular
 
+        private void CmbSelecteazaClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbSelecteazaClient.SelectedItem is Client c)
+            {
+                // Umple formularul cu datele clientului selectat
+                TxtNume.Text = c.Nume;
+                TxtPrenume.Text = c.Prenume;
+                TxtCNP.Text = c.CNP;
+                DtpDataNasterii.SelectedDate = c.DataNasterii;
 
+                if (c.Gen == "Feminin") RbFeminin.IsChecked = true;
+                else RbMasculin.IsChecked = true;
 
+                CbNewsletter.IsChecked = c.Abonat == "Da";
+            }
+        }
+
+        private void LstFiltruGen_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LstFiltruGen.SelectedItem is ListBoxItem item)
+            {
+                string genSelectat = item.Content.ToString();
+
+                if (genSelectat == "Toți")
+                {
+                    DataGridClienti.ItemsSource = listaClienti;
+                }
+                else
+                {
+                    DataGridClienti.ItemsSource = listaClienti
+                        .Where(c => c.Gen == genSelectat)
+                        .ToList();
+                }
+            }
+        }
+
+        private void OnModificaClient(object sender, RoutedEventArgs e)
+        {
+            if (DataGridClienti.SelectedItem is Client c)
+            {
+                TxtNume.Text = c.Nume;
+                TxtPrenume.Text = c.Prenume;
+                TxtCNP.Text = c.CNP;
+                DtpDataNasterii.SelectedDate = c.DataNasterii;
+
+                // gen
+                if (c.Gen == "Feminin") RbFeminin.IsChecked = true;
+                else RbMasculin.IsChecked = true;
+
+                // abonare
+                CbNewsletter.IsChecked = c.Abonat=="Da";
+            }
+        }
+        private void OnActualizeazaClient(object sender, RoutedEventArgs e)
+        {
+            if (DataGridClienti.SelectedItem is Client c)
+            {
+                c.Nume = TxtNume.Text;
+                c.Prenume = TxtPrenume.Text;
+                c.CNP = TxtCNP.Text;
+                c.DataNasterii = DtpDataNasterii.SelectedDate ?? DateTime.Today;
+                c.Gen = RbFeminin.IsChecked == true ? "Feminin" : "Masculin";
+                c.Abonat = CbNewsletter.IsChecked == true ? "Da" : "Nu";
+
+                // actualizare DataGrid
+                DataGridClienti.Items.Refresh();
+            }
+        }
 
 
 
