@@ -1,0 +1,11 @@
+﻿Popescu;Ion;1980523123456;1980-05-23;Masculin;Da
+Ionescu;Maria;2990315123456;1999-03-15;Feminin;Nu
+Georgescu;Andrei;1961201123456;1961-12-01;Masculin;Da
+Dumitrescu;Elena;2870722123456;1987-07-22;Feminin;Da
+Stan;Mihai;1920410123456;1992-04-10;Masculin;Nu
+Iliescu;Ana;2011105123456;2001-11-05;Feminin;Nu
+Radu;Cristian;1950901123456;1995-09-01;Masculin;Da
+Toma;Bianca;2980228123456;1998-02-28;Feminin;Da
+Marin;Vlad;1930617123456;1993-06-17;Masculin;Nu
+Petrescu;Ioana;2001224123456;2000-12-24;Feminin;Da
+

@@ -1,6 +1,8 @@
 ﻿using LibrarieModele;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,10 +17,28 @@ using System.Windows.Shapes;
 
 namespace InchirieriMasini.WPF
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+
         public ObservableCollection<Masina> Masini { get; set; }
-        public Masina MasinaCurenta { get; set; }
+
+        private Masina masinaCurenta;
+        public Masina MasinaCurenta
+        {
+            get => masinaCurenta;
+            set
+            {
+                masinaCurenta = value;
+                OnPropertyChanged(nameof(MasinaCurenta));
+            }
+        }
+
 
         private const int MAX_LUNGIME = 15;
 
@@ -28,19 +48,71 @@ namespace InchirieriMasini.WPF
         public MainWindow()
         {
             InitializeComponent();
+            IncarcaClientiDinFisier();
+
 
             // conectăm DataGrid-ul la listă
             DataGridClienti.ItemsSource = listaClienti;
             CmbSelecteazaClient.ItemsSource = listaClienti;
+
+            
+
             this.SizeChanged += MainWindow_SizeChanged;
             Masini = new ObservableCollection<Masina>();
             MasinaCurenta = new Masina();
+            IncarcaMasiniDinFisier();
             DataContext = this;
 
 
 
 
         }
+
+        private void IncarcaClientiDinFisier()
+        {
+            string path = "clienti.txt";
+
+            if (!File.Exists(path))
+                return;
+
+            var linii = File.ReadAllLines(path);
+
+            foreach (var linie in linii)
+            {
+                var parts = linie.Split(';');
+                if (parts.Length == 6)
+                {
+                    var c = new Client(
+                        parts[0],               // Nume
+                        parts[1],               // Prenume
+                        parts[2],               // CNP
+                        DateTime.Parse(parts[3])// Data nașterii
+                    );
+
+                    c.Gen = parts[4];
+                    c.Abonat = parts[5];
+
+                    listaClienti.Add(c);
+                }
+            }
+        }
+
+        private void SalveazaClientiInFisier()
+        {
+            string path = "clienti.txt";
+
+            List<string> linii = new List<string>();
+
+            foreach (var c in listaClienti)
+            {
+                linii.Add($"{c.Nume};{c.Prenume};{c.CNP};{c.DataNasterii:yyyy-MM-dd};{c.Gen};{c.Abonat}");
+            }
+
+            File.WriteAllLines(path, linii);
+        }
+
+
+
 
         // ============================
         // VALIDARE + ADAUGARE CLIENT
@@ -137,6 +209,7 @@ namespace InchirieriMasini.WPF
 
             // adăugăm în tabel
             listaClienti.Add(c);
+            SalveazaClientiInFisier();
 
             MessageBox.Show("Client adăugat cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -145,18 +218,33 @@ namespace InchirieriMasini.WPF
 
         private void OnResetClient(object sender, RoutedEventArgs e)
         {
+            // Reset text
             TxtNume.Text = "";
             TxtPrenume.Text = "";
             TxtCNP.Text = "";
 
+            // Reset DatePicker
+            DtpDataNasterii.SelectedDate = null;
+
+            // Reset gen
+            RbFeminin.IsChecked = false;
+            RbMasculin.IsChecked = false;
+
+            // Reset newsletter
+            CbNewsletter.IsChecked = false;
+
+            // Reset erori
             ErrNume.Visibility = Visibility.Collapsed;
             ErrPrenume.Visibility = Visibility.Collapsed;
             ErrCNP.Visibility = Visibility.Collapsed;
 
+            // Reset culori label
             LblNume.Foreground = new SolidColorBrush(Color.FromRgb(27, 79, 114));
             LblPrenume.Foreground = new SolidColorBrush(Color.FromRgb(27, 79, 114));
             LblCNP.Foreground = new SolidColorBrush(Color.FromRgb(27, 79, 114));
         }
+
+
 
         private void OnExit(object sender, RoutedEventArgs e)
         {
@@ -306,6 +394,8 @@ namespace InchirieriMasini.WPF
                 c.Gen = RbFeminin.IsChecked == true ? "Feminin" : "Masculin";
                 c.Abonat = CbNewsletter.IsChecked == true ? "Da" : "Nu";
 
+                SalveazaClientiInFisier();
+
                 // actualizare DataGrid
                 DataGridClienti.Items.Refresh();
             }
@@ -327,6 +417,8 @@ namespace InchirieriMasini.WPF
         private void BtnModificaMasina_Click(object sender, RoutedEventArgs e)
         {
             // Binding TwoWay actualizează automat obiectul selectat
+            if (DataGridMasini.SelectedItem is Masina m)
+                MasinaCurenta = m;
         }
 
         private void BtnStergeMasina_Click(object sender, RoutedEventArgs e)
@@ -334,6 +426,59 @@ namespace InchirieriMasini.WPF
             if (DataGridMasini.SelectedItem is Masina m)
                 Masini.Remove(m);
         }
+
+
+        private void DataGridMasini_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataGridMasini.SelectedItem is Masina m)
+                MasinaCurenta = m;
+        }
+
+        private void IncarcaMasiniDinFisier()
+        {
+            string path = "masini.txt";
+
+            if (!File.Exists(path))
+                return;
+
+            var linii = File.ReadAllLines(path);
+
+            foreach (var linie in linii)
+            {
+                var parts = linie.Split(';');
+                if (parts.Length == 5)
+                {
+                    Masini.Add(new Masina
+                    {
+                        Marca = parts[0],
+                        Model = parts[1],
+                        AnFabricatie = int.Parse(parts[2]),
+                        NumarInmatriculare = parts[3],
+                        Disponibila = bool.Parse(parts[4])
+                    });
+                }
+            }
+        }
+
+        private void SalveazaMasiniInFisier()
+        {
+            string path = "masini.txt";
+
+            List<string> linii = new List<string>();
+
+            foreach (var m in Masini)
+            {
+                linii.Add($"{m.Marca};{m.Model};{m.AnFabricatie};{m.NumarInmatriculare};{m.Disponibila}");
+            }
+
+            File.WriteAllLines(path, linii);
+        }
+
+
+
+
+
+
 
 
 

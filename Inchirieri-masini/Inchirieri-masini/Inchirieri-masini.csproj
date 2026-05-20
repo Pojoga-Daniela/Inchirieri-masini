@@ -14,9 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="clienti.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="masini.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

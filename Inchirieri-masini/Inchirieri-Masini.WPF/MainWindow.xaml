@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Detalii Închiriere"
-        Width="900"
+        Width="1000"
         Height="600"
         WindowStartupLocation="CenterScreen"
         Background="#D6EAF8"
@@ -284,7 +284,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nume" Binding="{Binding Nume}" Width="*"/>
                         <DataGridTextColumn Header="Prenume" Binding="{Binding Prenume}" Width="*"/>
-                        <DataGridTextColumn Header="CNP" Binding="{Binding CNP}" Width="*"/>
+                        <DataGridTextColumn Header="CNP" Binding="{Binding CNP}" Width="110"/>
 
                         <!-- GEN -->
                         <DataGridTextColumn Header="Gen" Binding="{Binding Gen}" Width="*"/>

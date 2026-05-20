@@ -77,5 +77,11 @@ namespace LibrarieModele
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+        public string Info()
+        {
+            return $"{Marca} {Model}, An: {AnFabricatie}, Nr: {NumarInmatriculare}, Disponibila: {(Disponibila ? "Da" : "Nu")}";
+        }
+
     }
 }

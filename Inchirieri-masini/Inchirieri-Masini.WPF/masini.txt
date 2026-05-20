@@ -1,0 +1,20 @@
+﻿Dacia;Logan;2018;SV01ABC;true
+Dacia;Duster;2021;SV45DST;true
+Volkswagen;Golf;2016;SV22XYZ;false
+Volkswagen;Passat;2019;SV88PAS;true
+BMW;X5;2020;SV99BMW;true
+BMW;Seria 3;2017;SV33BMW;false
+Audi;A4;2018;SV12AUD;true
+Audi;Q5;2020;SV55Q5A;true
+Mercedes;C-Class;2019;SV77MRC;false
+Mercedes;GLA;2021;SV90GLA;true
+Ford;Focus;2015;SV10FCS;true
+Ford;Kuga;2018;SV66KGA;false
+Renault;Megane;2017;SV14MGN;true
+Renault;Captur;2020;SV28CPT;true
+Skoda;Octavia;2019;SV44OCT;true
+Skoda;Kodiaq;2021;SV81KOD;false
+Toyota;Corolla;2018;SV19CRL;true
+Toyota;RAV4;2020;SV72RV4;true
+Hyundai;Tucson;2019;SV63TCS;true
+Hyundai;i30;2017;SV05HYI;false
