@@ -355,11 +355,13 @@
                     <!-- Butoane CRUD -->
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Button Content="Adaugă" Width="90" Margin="0 0 10 0"
-                    Click="BtnAdaugaMasina_Click"/>
+                                    Click="BtnAdaugaMasina_Click"/>
                         <Button Content="Modifică" Width="90" Margin="0 0 10 0"
-                    Click="BtnModificaMasina_Click"/>
+                                Click="BtnModificaMasina_Click"/>
+                        <Button Content="Actualizează" Width="125" Margin="0 0 10 0"
+                                Click="BtnActualizeazaMasina_Click"/>
                         <Button Content="Șterge" Width="80"
-                    Click="BtnStergeMasina_Click"/>
+                                Click="BtnStergeMasina_Click"/>
                     </StackPanel>
 
                     <!-- DataGrid -->

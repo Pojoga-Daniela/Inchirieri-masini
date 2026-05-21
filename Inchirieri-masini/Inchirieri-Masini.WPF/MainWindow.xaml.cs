@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 
 namespace InchirieriMasini.WPF
@@ -403,6 +404,9 @@ namespace InchirieriMasini.WPF
 
         private void BtnAdaugaMasina_Click(object sender, RoutedEventArgs e)
         {
+            if (!ValideazaDateMasina())
+                return;
+
             Masini.Add(new Masina
             {
                 Marca = MasinaCurenta.Marca,
@@ -412,14 +416,35 @@ namespace InchirieriMasini.WPF
                 Disponibila = MasinaCurenta.Disponibila
             });
 
+           
+            MessageBox.Show("Mașină adăugată cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+
             MasinaCurenta = new Masina();
         }
+
         private void BtnModificaMasina_Click(object sender, RoutedEventArgs e)
         {
             // Binding TwoWay actualizează automat obiectul selectat
             if (DataGridMasini.SelectedItem is Masina m)
                 MasinaCurenta = m;
         }
+
+        private void BtnActualizeazaMasina_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValideazaDateMasina())
+                return;
+
+            // Binding TwoWay a modificat deja obiectul selectat
+            DataGridMasini.Items.Refresh();
+
+            // Resetăm formularul după actualizare
+            MasinaCurenta = new Masina();
+
+            MessageBox.Show("Mașină actualizată cu succes!", "Succes",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
 
         private void BtnStergeMasina_Click(object sender, RoutedEventArgs e)
         {
@@ -472,6 +497,61 @@ namespace InchirieriMasini.WPF
             }
 
             File.WriteAllLines(path, linii);
+        }
+
+        private bool ValideazaDateMasina()
+        {
+            bool ok = true;
+
+            // VALIDARE MARCĂ
+            if (string.IsNullOrWhiteSpace(MasinaCurenta.Marca))
+            {
+                MessageBox.Show("Marca este obligatorie.");
+                ok = false;
+            }
+
+            // VALIDARE MODEL
+            if (string.IsNullOrWhiteSpace(MasinaCurenta.Model))
+            {
+                MessageBox.Show("Modelul este obligatoriu.");
+                ok = false;
+            }
+
+            
+            // VALIDARE AN FABRICAȚIE – realist (1900–2026)
+            if (MasinaCurenta.AnFabricatie < 1900 || MasinaCurenta.AnFabricatie > 2026)
+            {
+                MessageBox.Show("Anul de fabricație trebuie să fie între 1900 și 2026.");
+                ok = false;
+            }
+
+
+            // VALIDARE NUMĂR ÎNMATRICULARE – format SV12ABC
+            if (string.IsNullOrWhiteSpace(MasinaCurenta.NumarInmatriculare) ||
+                !EsteNumarInmatriculareValid(MasinaCurenta.NumarInmatriculare.ToUpper()))
+            {
+                MessageBox.Show("Numărul de înmatriculare trebuie să fie în formatul SV12ABC.");
+                ok = false;
+            }
+
+            // VALIDARE UNICITATE NUMĂR ÎNMATRICULARE
+            if (Masini.Any(x => x != MasinaCurenta &&
+                                x.NumarInmatriculare == MasinaCurenta.NumarInmatriculare))
+            {
+                MessageBox.Show("Există deja o mașină cu acest număr de înmatriculare!");
+                ok = false;
+            }
+
+
+
+
+
+            return ok;
+        }
+
+        private bool EsteNumarInmatriculareValid(string nr)
+        {
+            return Regex.IsMatch(nr, @"^[A-Z]{2}[0-9]{2}[A-Z]{3}$");
         }
 
 
