@@ -30,6 +30,7 @@ namespace InchirieriMasini.WPF
         public ObservableCollection<Masina> Masini { get; set; }
 
         private Masina masinaCurenta;
+
         public Masina MasinaCurenta
         {
             get => masinaCurenta;
@@ -49,7 +50,15 @@ namespace InchirieriMasini.WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            Masini = new ObservableCollection<Masina>();
+            MasinaCurenta = new Masina();
+
+            
             IncarcaClientiDinFisier();
+            IncarcaMasiniDinFisier();
+
+            DataContext = this;
 
 
             // conectăm DataGrid-ul la listă
@@ -59,10 +68,9 @@ namespace InchirieriMasini.WPF
             
 
             this.SizeChanged += MainWindow_SizeChanged;
-            Masini = new ObservableCollection<Masina>();
-            MasinaCurenta = new Masina();
-            IncarcaMasiniDinFisier();
-            DataContext = this;
+            
+            
+            
 
 
 
@@ -71,7 +79,10 @@ namespace InchirieriMasini.WPF
 
         private void IncarcaClientiDinFisier()
         {
-            string path = "clienti.txt";
+            string path = System.IO.Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "clienti.txt"
+            );
 
             if (!File.Exists(path))
                 return;
@@ -100,8 +111,10 @@ namespace InchirieriMasini.WPF
 
         private void SalveazaClientiInFisier()
         {
-            string path = "clienti.txt";
-
+            string path = System.IO.Path.Combine(
+                 AppDomain.CurrentDomain.BaseDirectory,
+                 "clienti.txt"
+             );
             List<string> linii = new List<string>();
 
             foreach (var c in listaClienti)
@@ -115,9 +128,9 @@ namespace InchirieriMasini.WPF
 
 
 
-        // ============================
+        
         // VALIDARE + ADAUGARE CLIENT
-        // ============================
+        
 
         private bool ValideazaDateClient()
         {
@@ -416,8 +429,10 @@ namespace InchirieriMasini.WPF
                 Disponibila = MasinaCurenta.Disponibila
             });
 
-           
+            SalveazaMasiniInFisier();
+
             MessageBox.Show("Mașină adăugată cu succes!", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+           
 
             MasinaCurenta = new Masina();
         }
@@ -436,6 +451,8 @@ namespace InchirieriMasini.WPF
 
             // Binding TwoWay a modificat deja obiectul selectat
             DataGridMasini.Items.Refresh();
+            SalveazaMasiniInFisier();
+
 
             // Resetăm formularul după actualizare
             MasinaCurenta = new Masina();
@@ -449,7 +466,11 @@ namespace InchirieriMasini.WPF
         private void BtnStergeMasina_Click(object sender, RoutedEventArgs e)
         {
             if (DataGridMasini.SelectedItem is Masina m)
+            {
                 Masini.Remove(m);
+                SalveazaMasiniInFisier();
+            }
+
         }
 
 
